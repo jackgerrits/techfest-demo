@@ -2,7 +2,7 @@
 <html>
 
 <body>
-  <script type="text/javascript" src="./keys.js"></script>
+  <script src="./keys.js"></script>
   <script>
     const coffees = [
       {
@@ -84,7 +84,6 @@
       const d = new Date();
       return { "day": d.getDay() }
     });
-    console.log(userFeatureProvider.generateContextFeatures());
 
     async function dispatchMessage(message) {
       let result = {};
@@ -197,6 +196,9 @@
       document.getElementById("inputField").value = "";
       let output = document.getElementById("message");
 
+      output.innerHTML += `<b>${val}</b> <br>`;
+
+
       let response;
       try {
         response = await dispatchMessage(val);
@@ -212,16 +214,15 @@
 
   <p id="message"></p><br>
   <input id="inputField" type="text">
-  <button id="myButton" onclick="messageSubmitted()">Submit</button>
+  <button id="submitButton" onclick="messageSubmitted()">Submit</button>
   <script>
     document.getElementById("inputField")
       .addEventListener("keyup", function (event) {
         event.preventDefault();
         if (event.keyCode === 13) {
-          document.getElementById("myButton").click();
+          document.getElementById("submitButton").click();
         }
       });
   </script>
 </body>
-
 </html>
