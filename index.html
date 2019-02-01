@@ -1,0 +1,228 @@
+<!DOCTYPE HTML>
+<html>
+
+<body>
+    <script type="text/javascript" src="./keys.js"></script>
+  <script>
+const coffees = [
+    {
+      "id": "Cappuccino",
+      "features": [
+        {
+          "Brand": "starbucks"
+        }
+      ]
+    },
+    {
+      "id": "Espresso",
+      "features": [
+        {
+          "Brand": "starbucks"
+        }
+      ]
+    },
+    {
+      "id": "Latte",
+      "features": [
+        {
+          "Brand": "starbucks"
+        }
+      ]
+    },
+    {
+      "id": "Macchiato",
+      "features": [
+        {
+          "Brand": "starbucks"
+        }
+      ]
+    },
+    {
+      "id": "Mocha",
+      "features": [
+        {
+          "Brand": "starbucks"
+        }
+      ]
+    }
+  ];
+
+  let lastEventId = "";
+
+  function getCoffeeList(coffeeData) {
+    return coffeeData.map(x => x.id);
+  }
+
+  const Weather = {"Sunny": 0, "Rainy": 1, "Snowy": 2};
+
+  class UserFeatureProvider {
+    constructor() {
+      this.providers = [];
+    }
+
+    addProvider(provider) {
+      this.providers.push(provider);
+    }
+
+    generateContextFeatures(data){
+      let returnObject = [];
+      for (let prov of this.providers) {
+        returnObject.push(prov(data));
+      }
+      return returnObject;
+    }
+  };
+
+  function chooseRandomEnumKeyFromObject(enumObject) {
+    let keys = Object.keys(enumObject);
+    return keys[ keys.length * Math.random() << 0];
+  };
+
+  let userFeatureProvider = new UserFeatureProvider();
+  userFeatureProvider.addProvider(data => { return {"weather" : chooseRandomEnumKeyFromObject(Weather)}});
+  userFeatureProvider.addProvider(data => {
+    const d = new Date();
+    return {"day" : d.getDay()}
+  });
+  console.log(userFeatureProvider.generateContextFeatures());
+
+  async function dispatchMessage(message) {
+    let result = {};
+    let data = await classifyIntent(message);
+    result.intent = data.topScoringIntent.intent;
+    result.confidence = data.topScoringIntent.score;
+    let response = await dispatchIntent(data.topScoringIntent.intent, data.topScoringIntent.score);
+
+    return Object.assign({}, result, response);
+  }
+
+  async function dispatchIntent(intent, confidence) {
+    let result = {};
+    switch (intent) {
+      case "ShowMenu":
+        result.message = getCoffeeList(coffees).join(" ");
+        break;
+      case "ChooseRank":
+        let temp = await rank();
+        result.message = `Why don't you try a ${temp.response.rewardActionId}?`;
+        result.response = temp.response;
+        result.context = temp.context;
+
+        // Set the state object for the last event id to be used for rewards.
+        lastEventId = temp.response.eventId;
+        break;
+      case "RewardLike":
+        if(lastEventId === "") {
+          throw new Error('You need to ask for a coffee type before you can rate it.');
+        }
+        let temp1 = await reward(lastEventId);
+        result.message = "That's great! I'll keep learning your preferences over time.";
+        result.response = temp1.response;
+        result.context = temp1.context;
+        lastEventId = "";
+        break;
+      case "RewardDislike":
+        if(lastEventId === "") {
+          throw new Error('You need to ask for a coffee type before you can rate it.');
+        }
+        let temp2 = await reward(lastEventId);
+        result.message = "Oh well, maybe I'll guess better next time.";
+        result.response = temp2.response;
+        result.context = temp2.context;
+        lastEventId = "";
+        break;
+      case "Reset":
+        result.message = "reset";
+        break;
+      default:
+        throw new Error('I am not sure what intent that was?');
+    }
+    return result;
+  }
+
+  async function rank() {
+    let context = {};
+    context.contextFeatures = userFeatureProvider.generateContextFeatures();
+    context.actions = coffees;
+    context.excludeActions = null;
+    context.activated = true;
+
+    let response = await fetch('https://westus2.api.cognitive.microsoft.com/personalization/v1.0/rank', {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Ocp-Apim-Subscription-Key": COG_SVC_KEY
+      },
+      method: 'POST',
+      body: JSON.stringify(context)
+    });
+
+    let result = {};
+    result.response = await response.json();
+    result.context = context;
+    return result;
+  }
+
+  async function reward(eventId) {
+    let context = {};
+    context.value = 1.0;
+
+    let response = await fetch(`https://westus2.api.cognitive.microsoft.com/personalization/v1.0/events/${eventId}/reward`, {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Ocp-Apim-Subscription-Key": COG_SVC_KEY
+      },
+      method: 'POST',
+      body: JSON.stringify(context)
+    });
+
+    let result = {};
+    result.response = response;
+    result.context = context;
+    return result;
+  }
+
+  async function classifyIntent(query) {
+    let response = await fetch(`https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/${LUIS_APP_ID}?q=${query}`, {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        "Ocp-Apim-Subscription-Key": LUIS_KEY
+      },
+      method: 'GET',
+    });
+    return await response.json()
+  }
+
+async function messageSubmitted()
+{
+  let val = document.getElementById("inputField").value;
+  document.getElementById("inputField").value = "";
+  let output = document.getElementById("message");
+
+  let response;
+  try {
+    response = await dispatchMessage(val);
+    console.log(response);
+    output.innerHTML += response.message + "<br>";
+  }
+  catch(err) {
+    output.innerHTML += err.message + "<br>";
+  }
+}
+
+</script>
+
+<p id="message"></p><br>
+<input id="inputField" type="text">
+<button id="myButton" onclick="messageSubmitted()">Submit</button>
+<script>
+document.getElementById("inputField")
+  .addEventListener("keyup", function(event) {
+  event.preventDefault();
+  if (event.keyCode === 13) {
+      document.getElementById("myButton").click();
+  }
+});
+</script>
+</body>
+
+</html>
