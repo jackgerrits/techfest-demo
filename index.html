@@ -5,7 +5,7 @@
   <script src="./key.js"></script>
   <script src="./ext/renderjson.js"></script>
   <style>
-   .renderjson a {
+.renderjson a {
   text-decoration: none;
 }
 
@@ -254,16 +254,16 @@
         diagLog.appendChild(document.createElement("br"));
         diagLog.appendChild(document.createTextNode(`confidence: ${response.confidence}`));
         diagLog.appendChild(document.createElement("br"));
-        if(response.intent === "ChooseRank") {
+        if (response.intent === "ChooseRank") {
           diagLog.appendChild(document.createTextNode("context sent:"));
           diagLog.appendChild(renderjson(response.context));
           diagLog.appendChild(document.createTextNode("response received:"));
           diagLog.appendChild(renderjson(response.response));
-
         } else if (response.intent === "RewardLike" || response.intent === "RewardDislike") {
           diagLog.appendChild(document.createTextNode("reward sent:"));
           diagLog.appendChild(renderjson(response.context));
         }
+        diagLog.appendChild(document.createElement("hr"));
       }
       catch (err) {
         outputLog.innerHTML += err.message + "<br>";
@@ -271,10 +271,15 @@
     }
   </script>
 
-  <p id="message"></p><br>
-  <div style="float: right;" id="diagInfo"></div><br>
-  <input id="inputField" type="text">
-  <button id="submitButton" onclick="messageSubmitted()">Submit</button>
+  <div style="float: left;">
+    <div id="message"></div><br>
+    <input id="inputField" type="text">
+    <button id="submitButton" onclick="messageSubmitted()">Submit</button>
+  </div>
+
+  <div style="float: left; padding-left: 20px;" id="diagInfo">
+  </div>
+
   <script>
     document.getElementById("inputField")
       .addEventListener("keyup", function (event) {
@@ -285,4 +290,5 @@
       });
   </script>
 </body>
+
 </html>
