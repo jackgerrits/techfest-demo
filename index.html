@@ -2,7 +2,49 @@
 <html>
 
 <body>
-  <script src="./keys.js"></script>
+  <script src="./key.js"></script>
+  <script src="./ext/renderjson.js"></script>
+  <style>
+   .renderjson a {
+  text-decoration: none;
+}
+
+.renderjson .disclosure {
+  color: crimson;
+}
+
+.renderjson .syntax {
+  color: grey;
+}
+
+.renderjson .string {
+  color: red;
+}
+
+.renderjson .number {
+  color: cyan;
+}
+
+.renderjson .boolean {
+  color: plum;
+}
+
+.renderjson .key {
+  color: lightblue;
+}
+
+.renderjson .keyword {
+  color: lightgoldenrodyellow;
+}
+
+.renderjson .object.syntax {
+  color: lightseagreen;
+}
+
+.renderjson .array.syntax {
+  color: lightsalmon;
+}
+  </style>
   <script>
     const coffees = [
       {
@@ -191,28 +233,46 @@
       return await response.json()
     }
 
+    renderjson.set_icons('+', '-');
+    renderjson.set_show_to_level(1);
     async function messageSubmitted() {
-      let val = document.getElementById("inputField").value;
+      let submittedMessage = document.getElementById("inputField").value;
       document.getElementById("inputField").value = "";
-      let output = document.getElementById("message");
+      let outputLog = document.getElementById("message");
+      let diagLog = document.getElementById("diagInfo");
 
-      output.innerHTML += `<b>${val}</b> <br>`;
+      outputLog.innerHTML += `<b>${submittedMessage}</b> <br>`;
 
 
       let response;
       try {
-        response = await dispatchMessage(val);
+        response = await dispatchMessage(submittedMessage);
         console.log(response);
-        output.innerHTML += response.message + "<br>";
+        outputLog.innerHTML += response.message + "<br>";
+
+        diagLog.appendChild(document.createTextNode(`intent: ${response.intent}`));
+        diagLog.appendChild(document.createElement("br"));
+        diagLog.appendChild(document.createTextNode(`confidence: ${response.confidence}`));
+        diagLog.appendChild(document.createElement("br"));
+        if(response.intent === "ChooseRank") {
+          diagLog.appendChild(document.createTextNode("context sent:"));
+          diagLog.appendChild(renderjson(response.context));
+          diagLog.appendChild(document.createTextNode("response received:"));
+          diagLog.appendChild(renderjson(response.response));
+
+        } else if (response.intent === "RewardLike" || response.intent === "RewardDislike") {
+          diagLog.appendChild(document.createTextNode("reward sent:"));
+          diagLog.appendChild(renderjson(response.context));
+        }
       }
       catch (err) {
-        output.innerHTML += err.message + "<br>";
+        outputLog.innerHTML += err.message + "<br>";
       }
     }
-
   </script>
 
   <p id="message"></p><br>
+  <div style="float: right;" id="diagInfo"></div><br>
   <input id="inputField" type="text">
   <button id="submitButton" onclick="messageSubmitted()">Submit</button>
   <script>
