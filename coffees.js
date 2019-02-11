@@ -1,22 +1,5 @@
 const coffees = [
   {
-    "id": "Cappuccino",
-    "features": [
-      {
-        "BeansOrigin": "Kenya"
-      },
-      {
-        "Organic": "Y"
-      },
-      {
-        "Roast": "LightRoast"
-      },
-      {
-        "Hot": "Y"
-      }
-    ]
-  },
-  {
     "id": "Espresso",
     "features": [
       {
@@ -30,6 +13,12 @@ const coffees = [
       },
       {
         "Hot": "Y"
+      },
+      {
+        "Milk": "N"
+      },
+      {
+        "Sweet": "N"
       }
     ]
   },
@@ -47,23 +36,12 @@ const coffees = [
       },
       {
         "Hot": "Y"
-      }
-    ]
-  },
-  {
-    "id": "Macchiato",
-    "features": [
-      {
-        "BeansOrigin": "Kenya"
       },
       {
-        "Organic": "Y"
+        "Milk": "Y"
       },
       {
-        "Roast": "DarkRoast"
-      },
-      {
-        "Hot": "Y"
+        "Sweet": "N"
       }
     ]
   },
@@ -74,13 +52,19 @@ const coffees = [
         "BeansOrigin": "Ethiopia"
       },
       {
-        "Organic": "Y"
+        "Organic": "N"
       },
       {
         "Roast": "DarkRoast"
       },
       {
         "Hot": "Y"
+      },
+      {
+        "Milk": "Y"
+      },
+      {
+        "Sweet": "Y"
       }
     ]
   },
@@ -98,6 +82,35 @@ const coffees = [
       },
       {
         "Hot": "N"
+      },
+      {
+        "Milk": "N"
+      },
+      {
+        "Sweet": "N"
+      }
+    ]
+  },
+  {
+    "id": "Cold Brew",
+    "features": [
+      {
+        "BeansOrigin": "Ethiopia"
+      },
+      {
+        "Organic": "Y"
+      },
+      {
+        "Roast": "DarkRoast"
+      },
+      {
+        "Hot": "N"
+      },
+      {
+        "Milk": "N"
+      },
+      {
+        "Sweet": "N"
       }
     ]
   }
