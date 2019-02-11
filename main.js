@@ -30,7 +30,7 @@ let states =
   },
   recommend: {
     action: async (context) => {
-      let features = context.userFeatureProvider.generateContextFeatures(context.contextFeatures);
+      let features = context.userFeatureProvider.generateContextFeatures(context.featureData);
       let temp = await rank(features);
 
       let response = `Why don't you try a ${temp.response.rewardActionId}?`;
@@ -100,8 +100,6 @@ let states =
   }
 }
 
-const Weather = { "Sunny": 0, "Rainy": 1, "Snowy": 2, "Hot": 3 };
-
 function getCoffeeList(coffeeData) {
   return coffeeData.map((x) => x.id);
 }
@@ -124,11 +122,6 @@ class UserFeatureProvider {
   }
 };
 
-function chooseRandomEnumKeyFromObject(enumObject) {
-  let keys = Object.keys(enumObject);
-  return keys[keys.length * Math.random() << 0];
-};
-
 async function rank(contextFeatures) {
   let context = {};
   context.contextFeatures = contextFeatures;
@@ -149,6 +142,11 @@ async function rank(contextFeatures) {
   result.response = await response.json();
   result.context = context;
   return result;
+}
+
+async function weather(lat, long) {
+  let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${OPEN_WEATHER_MAP_KEY}`);
+  return await response.json();
 }
 
 async function reward(eventId, value) {
@@ -191,6 +189,14 @@ function append_message_bold(parent, text) {
   parent.innerHTML += `<b>${text}</b> <br>`;
 }
 
+function getCurrentLocation(options) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, ({code, message}) =>
+      reject(Object.assign(new Error(message), {name: "PositionError", code})),
+      options);
+    });
+};
+
 window.onload = async () => {
   renderjson.set_icons("+", "-");
   renderjson.set_show_to_level(1);
@@ -201,17 +207,98 @@ window.onload = async () => {
 
   let start_state = states.greeting;
 
-  let userFeatureProvider = new UserFeatureProvider();
-  userFeatureProvider.addProvider(data => { return { "weather": chooseRandomEnumKeyFromObject(Weather) } });
-  userFeatureProvider.addProvider(data => {
-    const d = new Date();
-    return { "day": d.getDay() }
-  });
-
   let context_transitions = {};
   context_transitions.lastEventId = "";
   context_transitions.featureData = {};
+
+  let location = undefined;
+  try {
+    location = await getCurrentLocation();
+  }
+  catch(ex) {
+    console.error("Location not available, location features turned off.");
+    console.error(ex)
+  }
+
+  if(location !== undefined)
+  {
+    context_transitions.featureData.location = location;
+    context_transitions.featureData.weather = await weather(location.coords.latitude, location.coords.longitude);;
+  }
+
+  let userFeatureProvider = new UserFeatureProvider();
+  userFeatureProvider.addProvider(data => {
+    return { "day": data.date.getDay() }
+  });
+
+  userFeatureProvider.addProvider(data => {
+    let hour = data.date.getHours();
+    let time;
+    if(hour < 7 || hour > 19)
+    {
+      time = "night";
+    } else if (hour >= 7 || hour < 12) {
+      time = "morning";
+    } else {
+      time = "afternoon";
+    }
+
+    return { "timeOfDay": time }
+  });
+
+  // Location is required for weather, city, season, temperature
+  if(location !== undefined) {
+    userFeatureProvider.addProvider(data => {
+      return { "city": data.weather.name }
+    });
+
+    userFeatureProvider.addProvider(data => {
+      return { "temperature": data.weather.main.temp }
+    });
+
+    userFeatureProvider.addProvider(data => {
+      return { "weather": data.weather.weather[0].main }
+    });
+
+    userFeatureProvider.addProvider(data => {
+      let month = data.date.getMonth();
+
+      // If in southern hemisphere offset months by 6 to get correct season.
+      if(data.location.coords.latitude < 0)
+      {
+        month = (month + 6) % 12;
+      }
+
+      let season = "";
+      switch(month) {
+        case 12:
+        case 1:
+        case 2:
+            season = "winter";
+        break;
+        case 3:
+        case 4:
+        case 5:
+            season = "spring";
+        break;
+        case 6:
+        case 7:
+        case 8:
+            season = "summer";
+        break;
+        case 9:
+        case 10:
+        case 11:
+            season = "fall";
+        break;
+      }
+      return { "season": season };
+    });
+
+  }
+
   context_transitions.userFeatureProvider = userFeatureProvider;
+  context_transitions.featureData.date = new Date();
 
   const go_to_state = async (current_state, state_context) => {
     clear_buttons(buttons);
