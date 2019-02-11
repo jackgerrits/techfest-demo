@@ -2,7 +2,7 @@ let states =
 {
   greeting: {
     action: async (context) => {
-      let response = "Hi, welcome.";
+      let response = "Hi, welcome. Would you like to see what's available or get a coffee recommendation?";
       return { response, context };
     },
     transitions: [
@@ -30,9 +30,10 @@ let states =
   },
   recommend: {
     action: async (context) => {
-      let temp = await rank();
+      let features = context.userFeatureProvider.generateContextFeatures(context.contextFeatures);
+      let temp = await rank(features);
 
-      let response = `Why don"t you try a ${temp.response.rewardActionId}?`;
+      let response = `Why don't you try a ${temp.response.rewardActionId}?`;
       let debug = {};
       debug.response = temp.response;
       debug.context = temp.context;
@@ -44,11 +45,11 @@ let states =
     },
     transitions: [
       {
-        text: "I like it",
+        text: "Sounds good",
         next_state: "like"
       },
       {
-        text: "I don't like it",
+        text: "Eh",
         next_state: "dislike"
       },
       {
@@ -83,16 +84,16 @@ let states =
       let debug = {};
       debug.response = temp.response;
       debug.context = temp.context;
-      let response = "Oh well, maybe I'll guess better next time.";
+      let response = "Okay I'll remember that, would you like another recomendation?";
       return { response, context, debug_type: "reward", debug };
     },
     transitions: [
       {
-        text: "Give me another recommendation",
+        text: "Sure",
         next_state: "recommend"
       },
       {
-        text: "Show me the menu",
+        text: "Actually, show me the menu",
         next_state: "menu"
       }
     ]
@@ -128,16 +129,9 @@ function chooseRandomEnumKeyFromObject(enumObject) {
   return keys[keys.length * Math.random() << 0];
 };
 
-let userFeatureProvider = new UserFeatureProvider();
-userFeatureProvider.addProvider(data => { return { "weather": chooseRandomEnumKeyFromObject(Weather) } });
-userFeatureProvider.addProvider(data => {
-  const d = new Date();
-  return { "day": d.getDay() }
-});
-
-async function rank() {
+async function rank(contextFeatures) {
   let context = {};
-  context.contextFeatures = userFeatureProvider.generateContextFeatures();
+  context.contextFeatures = contextFeatures;
   context.actions = coffees;
   context.excludeActions = null;
   context.activated = true;
@@ -207,8 +201,17 @@ window.onload = async () => {
 
   let start_state = states.greeting;
 
-  let context_transitions = {}
-  context_transitions.lastEventId = ""
+  let userFeatureProvider = new UserFeatureProvider();
+  userFeatureProvider.addProvider(data => { return { "weather": chooseRandomEnumKeyFromObject(Weather) } });
+  userFeatureProvider.addProvider(data => {
+    const d = new Date();
+    return { "day": d.getDay() }
+  });
+
+  let context_transitions = {};
+  context_transitions.lastEventId = "";
+  context_transitions.featureData = {};
+  context_transitions.userFeatureProvider = userFeatureProvider;
 
   const go_to_state = async (current_state, state_context) => {
     clear_buttons(buttons);
