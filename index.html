@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html>
+
 <body>
   <script src="./key.js"></script>
   <script src="./ext/renderjson.js"></script>
@@ -7,10 +8,44 @@
   <script src="./main.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
 
+  <div class="content">
+    <div class="left-col">
+      <div class="chat">
+        <div class="speech-bubble-bot">This is text</div>
+
+        <div class="speech-bubble-user">What should I get?
+          <button class="speech-button">button</button>
+        </div>
+        <div class="speech-bubble-bot">
+            <div class="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="right-col">
+      <div class="info-top-row">
+        Top
+      </div>
+      <div class="info-bottom-row">
+        <div class="info-bottom-row-left-col">
+          Bottom left
+        </div>
+        <div class="info-bottom-row-right-col">
+          Bottom Right
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div style="float: left;">
     <div id="message"></div><br>
     <div id="buttons"></div><br>
   </div>
   <div style="float: left; padding-left: 20px;" id="diagInfo"></div>
 </body>
+
 </html>
