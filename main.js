@@ -213,7 +213,7 @@ window.onload = async () => {
 
   let location = undefined;
   try {
-    location = await getCurrentLocation();
+    // location = await getCurrentLocation();
   }
   catch(ex) {
     console.error("Location not available, location features turned off.");
