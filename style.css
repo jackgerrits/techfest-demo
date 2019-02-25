@@ -68,6 +68,12 @@ html {
   /* margin-left: 0; */
 }
 
+.no-gutter > [class*='col-'] {
+  padding-right:0;
+  padding-left:0;
+}
+
+
 
 @media only screen and (min-width : 576px) {
   .page-title {
@@ -140,8 +146,8 @@ html {
   font-family: "Segoe UI";
   color: #333333;
   font-size: 14px;
-	letter-spacing: 0.05px;
-	line-height: 20px;
+  letter-spacing: 0.05px;
+  line-height: 20px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -194,10 +200,10 @@ html {
 }
 
 .chat {
-
-    background-color: #FFFFFF;
-    box-shadow: 0 10px 30px 0 rgba(0,0,0,0.1);
-    border-radius: 10px;
+background-color: #FFFFFF;
+box-shadow: 0 10px 30px 0 rgba(0,0,0,0.1);
+border-radius: 10px;
+/* height: fit-content!important; */
 }
 
 .backplate {
