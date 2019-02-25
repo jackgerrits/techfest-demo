@@ -170,6 +170,7 @@ async function reward(eventId, value) {
 
 function add_button(parent, text, callback) {
   let element = document.createElement("button");
+  element.classList.add("btn", "choice-btn");
   element.innerHTML = text;
   element.onclick = callback;
   parent.appendChild(element);
@@ -187,6 +188,33 @@ function append_message(parent, text) {
 
 function append_message_bold(parent, text) {
   parent.innerHTML += `<b>${text}</b> <br>`;
+}
+
+function append_user_message(parent, text) {
+  parent.innerHTML += `<b>${text}</b> <br>`;
+}
+
+function append_bot_message(parent, text, transitions) {
+  let outer = document.createElement("div");
+  outer.className = "col-lg-12";
+  let inner = document.createElement("div");
+  element.classList.add("speech-bubble-bot", "speech-bubble");
+  outer.appendChild(inner);
+
+  let textElem = document.createElement("div");
+  textElem.className = "speech-bubble-text";
+  textElem.innerHTML = text;
+  inner.appendChild(textElem);
+
+  for (let action of current_state.transitions) {
+    add_button(inner, action.text, () => {
+      // TODO disable buttons
+      append_user_message(parent, action.text);
+      go_to_state(states[action.next_state], result.context)
+    });
+  }
+
+  parent.appendChild(outer);
 }
 
 function getCurrentLocation(options) {
@@ -239,6 +267,7 @@ window.onload = async () => {
   let info_time = document.getElementById("info-time");
   let info_location = document.getElementById("info-location");
   let info_weather = document.getElementById("info-weather");
+  let chat_container = document.getElementById("chat-container");
 
   info_time.innerHTML = formatAMPM(new Date);
   repeatEvery(ONE_MINUTE, () => {
@@ -267,9 +296,6 @@ window.onload = async () => {
     context_transitions.featureData.weather = await weather(location.coords.latitude, location.coords.longitude);
     info_location.innerHTML = context_transitions.featureData.weather.name;
     info_weather.innerHTML = context_transitions.featureData.weather.weather[0].main;
-
-
-
   }
 
   let userFeatureProvider = new UserFeatureProvider();
