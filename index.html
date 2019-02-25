@@ -17,8 +17,8 @@
 
 <body>
   <div class="container h-100 d-none d-flex flex-column">
-    <div class="row">
-      <div class="col-lg-12 page-title">
+    <div class="row" style="min-height: 120px;">
+      <div class="col-lg-12 my-page-title">
         <span class="rwrl">RWRL / </span><span class="exploitation-vs-exp">Exploitation vs. Exploration</span>
       </div>
     </div>
@@ -27,14 +27,14 @@
         <div class="row h-100">
           <!-- <div class="left-col col-lg-3 gradient top-left-corner bottom-left-corner"> -->
           <div class="left-col col col-lg-3 d-none d-flex flex-column gradient top-left-corner bottom-left-corner">
-          <div class="row">
-            <div style="height: fit-content;" class="col-lg-10 offset-lg-1 info-bar">
+            <div class="row min-45">
+              <div style="height: fit-content;" class="col-lg-10 offset-lg-1 info-bar">
                 <div><img src="icon_sun_dk.svg"><span id="info-weather">weather</span></div>
                 <div><img src="icon_time_dk.svg"><span id="info-time">time</span></div>
                 <div><img src="icon_location_dk.svg"><span id="info-location">location</span></div>
               </div>
-          </div>
-          <div class="row flex-grow-1">
+            </div>
+            <div class="row flex-grow-1">
               <div class="col-lg-10 offset-lg-1">
                 <div class="chat row h-100 align-content-start" id="chat-container">
                   <!-- <div class="col-lg-12">
@@ -73,44 +73,51 @@
           </div>
           <div class="right-col col-lg-9 top-right-corner bottom-right-corner">
             <div class="row h-100">
-              <div class="col-lg-4 info-container">
-                <div class="row">
-                  <div class="col-lg-12 info-header">
+              <div class="col col-lg-4 d-none d-flex flex-column info-container">
+                <div class="row min-45">
+                  <div class="col-lg-12 info-header min-45">
                     <img src="icon_response_dk.svg">
                     <span class="info-title">Response received</span>
                   </div>
                 </div>
-              </div>
-              <div class="col-lg-4 info-container">
                 <div class="row">
+                  <div id="response" class="col-lg-12 info-body scroll-y"></div>
+                </div>
+              </div>
+              <div class="info-container col col-lg-4 d-none d-flex flex-column">
+              <!-- <div class="info-container col-lg-4"> -->
+                <div class="row flex-grow-1">
                   <div class="col-lg-12">
-                    <div class="row">
-
-                      <div class="col-lg-12 info-header">
+                    <div class="row min-45">
+                      <div class="col-lg-12 info-header min-45">
                         <img src="icon_reward_dk.svg">
                         <span class="info-title">Reward sent</span>
                       </div>
+                      <div id="reward" class="col-lg-12 info-body"></div>
                     </div>
                   </div>
+                </div>
+                <div class="row  ">
                   <div class="col-lg-12">
-                    <div class="row">
-
-                      <div class="col-lg-12 info-header ">
+                    <div class="row min-45">
+                      <div class="col-lg-12 info-header min-45">
                         <img src="icon_context_dk.svg">
                         <span class="info-title">Context</span>
                       </div>
+                      <div id="context" class="col-lg-12 info-body scroll-y gross-hack"></div>
                     </div>
                   </div>
                 </div>
 
               </div>
               <div class="col-lg-4 info-container top-right-corner bottom-right-corner">
-                <div class="row">
+                <div class="row min-45">
 
-                  <div class="col-lg-12 info-header top-right-corner">
+                  <div class="col-lg-12 info-header top-right-corner min-45">
                     <img src="icon_experiment_dk.svg">
                     <span class="info-title">Exploit vs. Explore</span>
                   </div>
+                  <div id="exploit-vs-explore" class="col-lg-12 info-body"></div>
                 </div>
               </div>
 

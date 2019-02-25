@@ -273,6 +273,12 @@ window.onload = async () => {
   let chat_container = document.getElementById("chat-container");
   let typing_indicator = document.getElementById("typing-indicator");
 
+  let response_container = document.getElementById("response");
+  let context_container = document.getElementById("context");
+  let reward_container = document.getElementById("reward");
+  let exploit_vs_explore_container = document.getElementById("exploit-vs-explore");
+
+
   info_time.innerHTML = formatAMPM(new Date);
   repeatEvery(ONE_MINUTE, () => {
     info_time.innerHTML = formatAMPM(new Date);
@@ -397,19 +403,21 @@ window.onload = async () => {
     }
     // (outputLog, result.response);
 
-    // if (result.hasOwnProperty("debug_type")) {
-    //   if (result.debug_type == "rank") {
-    //     diagLog.appendChild(document.createTextNode("context sent:"));
-    //     diagLog.appendChild(renderjson(result.debug.context));
-    //     diagLog.appendChild(document.createTextNode("response received:"));
-    //     diagLog.appendChild(renderjson(result.debug.response));
-    //   }
-    //   else if (result.debug_type == "reward") {
-    //     diagLog.appendChild(document.createTextNode("reward sent:"));
-    //     diagLog.appendChild(renderjson(result.debug.context));
-    //   }
-    //   diagLog.appendChild(document.createElement("hr"));
-    // }
+    if (result.hasOwnProperty("debug_type")) {
+      if (result.debug_type == "rank") {
+        context_container.appendChild(document.createTextNode(JSON.stringify(result.debug.context, null, 2)));
+        response_container.appendChild(document.createTextNode(JSON.stringify(result.debug.response, null, 2)));
+        // diagLog.appendChild(document.createTextNode("context sent:"));
+        // diagLog.appendChild(renderjson(result.debug.context));
+        // diagLog.appendChild(document.createTextNode("response received:"));
+        // diagLog.appendChild(renderjson(result.debug.response));
+      }
+      else if (result.debug_type == "reward") {
+        reward_container.appendChild(document.createTextNode(JSON.stringify(result.debug.context, null, 2)));
+        // diagLog.appendChild(document.createTextNode("reward sent:"));
+        // diagLog.appendChild(renderjson(result.debug.context));
+      }
+    }
 
     // for (let action of current_state.transitions) {
     //   add_button(buttons, action.text, () => {

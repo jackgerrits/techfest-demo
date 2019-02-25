@@ -47,23 +47,23 @@ html {
 }
 
 .rwrl {
-	height: 40px;
-	width: 89px;
+	/* height: 40px; */
+	/* width: 89px; */
 	color: #333333;
 	font-size: 24px;
 	font-weight: bold;
 	line-height: 40px;
 }
 .exploitation-vs-exp {
-	height: 40px;
-	width: 385px;
+	/* height: 40px; */
+	/* width: 385px; */
 	color: #333333;
 	font-size: 24px;
 	letter-spacing: -0.67px;
 	line-height: 40px;
 }
 
-.page-title {
+.my-page-title {
   margin-top: 55px;
   margin-bottom: 40px;
   /* margin-left: 0; */
@@ -76,11 +76,7 @@ html {
 
 
 
-@media only screen and (min-width : 576px) {
-  .page-title {
-    /* margin-left: -30px; */
-  }
-}
+
 
 .info-header {
   background-color: #FFFFFF;
@@ -167,6 +163,10 @@ html {
   justify-content: space-between;
 }
 
+.min-45 {
+  min-height: 45px;
+}
+
 
 
 .info-bottom-row {
@@ -178,6 +178,10 @@ html {
   /* flex-grow: 1; */
 }
 
+.scroll-y {
+  overflow-y: auto;
+  /* overflow: auto; */
+}
 
 .top-right-corner {
   border-top-right-radius: 0;
@@ -189,6 +193,15 @@ html {
 
 .top-left-corner {
   border-top-left-radius: 0;
+}
+.info-body {
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 22px;
+
+  /* height: auto; */
+  word-break: break-all;
+  line-break: normal;
 }
 
 .bottom-left-corner {
@@ -229,7 +242,19 @@ html {
 }
 
 }
+.gross-hack {
+  height: 500px;
+  /* min-height: 400px; */
+  /* max-height: 400px; */
+}
+.gross-hack-part-2 {
+  /* position: relative;
+  height: 40%; */
+}
 
+/*
+
+ */
 
 .chat {
   background-color: #FFFFFF;
