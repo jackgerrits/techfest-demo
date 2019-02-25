@@ -197,6 +197,37 @@ function getCurrentLocation(options) {
     });
 };
 
+function repeatEvery(interval, func) {
+  // Check current time and calculate the delay until next interval
+  var now = new Date(),
+      delay = interval - now % interval;
+
+  function start() {
+      // Execute function now...
+      func();
+      // ... and every interval
+      setInterval(func, interval);
+  }
+
+  // Delay execution until it's an even interval
+  setTimeout(start, delay);
+}
+
+var ONE_MINUTE = 60 * 1000;
+
+function formatAMPM(date) {
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? '0'+minutes : minutes;
+  var strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
+
+
+
 window.onload = async () => {
   renderjson.set_icons("+", "-");
   renderjson.set_show_to_level(1);
@@ -204,6 +235,16 @@ window.onload = async () => {
   let outputLog = document.getElementById("message");
   let buttons = document.getElementById("buttons");
   let diagLog = document.getElementById("diagInfo");
+
+  let info_time = document.getElementById("info-time");
+  let info_location = document.getElementById("info-location");
+  let info_weather = document.getElementById("info-weather");
+
+  info_time.innerHTML = formatAMPM(new Date);
+  repeatEvery(ONE_MINUTE, () => {
+    info_time.innerHTML = formatAMPM(new Date);
+  });
+
 
   let start_state = states.greeting;
 
@@ -213,7 +254,7 @@ window.onload = async () => {
 
   let location = undefined;
   try {
-    // location = await getCurrentLocation();
+    location = await getCurrentLocation();
   }
   catch(ex) {
     console.error("Location not available, location features turned off.");
@@ -223,7 +264,12 @@ window.onload = async () => {
   if(location !== undefined)
   {
     context_transitions.featureData.location = location;
-    context_transitions.featureData.weather = await weather(location.coords.latitude, location.coords.longitude);;
+    context_transitions.featureData.weather = await weather(location.coords.latitude, location.coords.longitude);
+    info_location.innerHTML = context_transitions.featureData.weather.name;
+    info_weather.innerHTML = context_transitions.featureData.weather.weather[0].main;
+
+
+
   }
 
   let userFeatureProvider = new UserFeatureProvider();
@@ -328,5 +374,5 @@ window.onload = async () => {
     }
   }
 
-  go_to_state(start_state, context_transitions);
+  // go_to_state(start_state, context_transitions);
 };
