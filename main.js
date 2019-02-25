@@ -172,8 +172,9 @@ function add_button(parent, text, callback) {
   let element = document.createElement("button");
   element.classList.add("btn", "choice-btn");
   element.innerHTML = text;
-  element.onclick = callback;
+  element.onclick = callback(element);
   parent.appendChild(element);
+  return element;
 }
 
 function clear_buttons(parent) {
@@ -191,14 +192,10 @@ function append_message_bold(parent, text) {
 }
 
 function append_user_message(parent, text) {
-  parent.innerHTML += `<b>${text}</b> <br>`;
-}
-
-function append_bot_message(parent, text, transitions) {
   let outer = document.createElement("div");
   outer.className = "col-lg-12";
   let inner = document.createElement("div");
-  element.classList.add("speech-bubble-bot", "speech-bubble");
+  inner.classList.add("speech-bubble-user", "speech-bubble");
   outer.appendChild(inner);
 
   let textElem = document.createElement("div");
@@ -206,15 +203,23 @@ function append_bot_message(parent, text, transitions) {
   textElem.innerHTML = text;
   inner.appendChild(textElem);
 
-  for (let action of current_state.transitions) {
-    add_button(inner, action.text, () => {
-      // TODO disable buttons
-      append_user_message(parent, action.text);
-      go_to_state(states[action.next_state], result.context)
-    });
-  }
+  parent.appendChild(outer);
+}
+
+function append_bot_message(parent, text, transitions, states, context) {
+  let outer = document.createElement("div");
+  outer.className = "col-lg-12";
+  let inner = document.createElement("div");
+  inner.classList.add("speech-bubble-bot", "speech-bubble");
+  outer.appendChild(inner);
+
+  let textElem = document.createElement("div");
+  textElem.className = "speech-bubble-text";
+  textElem.innerHTML = text;
+  inner.appendChild(textElem);
 
   parent.appendChild(outer);
+  return inner;
 }
 
 function getCurrentLocation(options) {
@@ -254,8 +259,6 @@ function formatAMPM(date) {
   return strTime;
 }
 
-
-
 window.onload = async () => {
   renderjson.set_icons("+", "-");
   renderjson.set_show_to_level(1);
@@ -268,6 +271,7 @@ window.onload = async () => {
   let info_location = document.getElementById("info-location");
   let info_weather = document.getElementById("info-weather");
   let chat_container = document.getElementById("chat-container");
+  let typing_indicator = document.getElementById("typing-indicator");
 
   info_time.innerHTML = formatAMPM(new Date);
   repeatEvery(ONE_MINUTE, () => {
@@ -373,32 +377,47 @@ window.onload = async () => {
   context_transitions.featureData.date = new Date();
 
   const go_to_state = async (current_state, state_context) => {
-    clear_buttons(buttons);
+    // clear_buttons(buttons);
 
     let result = await current_state.action(state_context);
-    append_message_bold(outputLog, result.response);
-
-    if (result.hasOwnProperty("debug_type")) {
-      if (result.debug_type == "rank") {
-        diagLog.appendChild(document.createTextNode("context sent:"));
-        diagLog.appendChild(renderjson(result.debug.context));
-        diagLog.appendChild(document.createTextNode("response received:"));
-        diagLog.appendChild(renderjson(result.debug.response));
-      }
-      else if (result.debug_type == "reward") {
-        diagLog.appendChild(document.createTextNode("reward sent:"));
-        diagLog.appendChild(renderjson(result.debug.context));
-      }
-      diagLog.appendChild(document.createElement("hr"));
-    }
-
+    // chat_container.removeChild(typing_indicator);
+    let button_container = append_bot_message(chat_container, result.response,current_state.transitions);
+    let buttons = [];
     for (let action of current_state.transitions) {
-      add_button(buttons, action.text, () => {
-        append_message(outputLog, action.text);
-        go_to_state(states[action.next_state], result.context)
-      });
+      buttons.push(add_button(button_container, action.text, (self) => {
+        return () => {
+          // chat_container.appendChild(typing_indicator);
+          buttons.forEach(button => button.disabled = true);
+          self.classList.add("selected");
+          // TODO disable buttons
+          append_user_message(chat_container, action.text);
+          go_to_state(states[action.next_state], result.context)
+        }
+      }));
     }
+    // (outputLog, result.response);
+
+    // if (result.hasOwnProperty("debug_type")) {
+    //   if (result.debug_type == "rank") {
+    //     diagLog.appendChild(document.createTextNode("context sent:"));
+    //     diagLog.appendChild(renderjson(result.debug.context));
+    //     diagLog.appendChild(document.createTextNode("response received:"));
+    //     diagLog.appendChild(renderjson(result.debug.response));
+    //   }
+    //   else if (result.debug_type == "reward") {
+    //     diagLog.appendChild(document.createTextNode("reward sent:"));
+    //     diagLog.appendChild(renderjson(result.debug.context));
+    //   }
+    //   diagLog.appendChild(document.createElement("hr"));
+    // }
+
+    // for (let action of current_state.transitions) {
+    //   add_button(buttons, action.text, () => {
+    //     append_message(outputLog, action.text);
+    //     go_to_state(states[action.next_state], result.context)
+    //   });
+    // }
   }
 
-  // go_to_state(start_state, context_transitions);
+  go_to_state(start_state, context_transitions);
 };
