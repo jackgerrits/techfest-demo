@@ -107,22 +107,25 @@ html {
   max-width: 80%;
   font-family: "Segoe UI";
   font-size: 14px;
+  border: 1px solid #33333316;
+
 }
 
 .speech-bubble-bot {
   margin-right: auto;
-  background-color: #4A4A4A;
-  color: #FFFFFF;
+  /* background-color: #4A4A4A; */
+  background-color: #FFFFFF;
+  color: #333333;
   line-height: 18px;
 }
 
 .speech-bubble-user {
   background: #cecece;
   margin-left: auto;
-  color: #F5F6FC;
-  letter-spacing: 0.05px;
+  color: #9013FE;
+    letter-spacing: 0.05px;
   line-height: 20px;
-    background-color: #9013FE;
+  background-color: #F6ECFF;
 }
 
 .speech-bubble-text {
@@ -294,9 +297,10 @@ html {
   text-align: left;
   white-space: normal;
   width: 100%;
-  /* margin-left: -15px; */
   background-color: #FAFAFA;
-  border: 1px solid #33333316;
+  border-style: solid;
+  border-color: #33333316;
+  border-width: 1px 0 0 0;
   border-radius: 0;
   color: #333333;
   font-family: "Segoe UI";
