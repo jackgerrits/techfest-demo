@@ -16,12 +16,14 @@
 </head>
 
 <body>
-  <div class="container h-100">
-    <div class="row h-100">
+  <div class="container h-100 d-none d-flex flex-column">
+    <div class="row">
       <div class="col-lg-12 page-title">
         <span class="rwrl">RWRL / </span><span class="exploitation-vs-exp">Exploitation vs. Exploration</span>
       </div>
-      <div class="col-lg-12 h-75 backplate">
+    </div>
+    <div class="row flex-grow-1">
+      <div class="col-lg-12 backplate">
         <div class="row h-100">
           <!-- <div class="left-col col-lg-3 gradient top-left-corner bottom-left-corner"> -->
           <div class="left-col col col-lg-3 d-none d-flex flex-column gradient top-left-corner bottom-left-corner">
@@ -34,34 +36,37 @@
           </div>
           <div class="row flex-grow-1">
               <div class="col-lg-10 offset-lg-1">
-                <div class="chat row h-100">
+                <div class="chat row h-100 align-content-start">
                   <div class="col-lg-12">
-                    <div class="speech-bubble-bot speech-bubble"><span class="speech-bubble-text">Hi, welcome. Would you like to see what's
+                    <div class="speech-bubble-bot speech-bubble"><div class="speech-bubble-text">Hi, welcome. Would you like to see what's
                       available
                       or
                       get
                       a
                       coffee
-                      recommendation?</span>
-                      <button class="btn btn-outline-primary choice-btn">Show me the menu</button>
-                      <button class="btn btn-outline-primary choice-btn">What should I get?</button>
+                      recommendation?</div>
+                      <button class="btn choice-btn" disabled="true">Show me the menu</button>
+                      <button class="btn choice-btn selected" disabled="true">What should I get?</button>
                     </div>
                   </div>
 
-                  <!-- <div class="col-lg-12">
+                  <div class="col-lg-12">
                     <div class="speech-bubble-user speech-bubble">
+                        <div class="speech-bubble-text">
                       What should I get?
+                      </div>
                     </div>
                   </div>
+
                   <div class="col-lg-12">
                     <div class="speech-bubble-bot speech-bubble">
-                      <div class="typing-indicator">
+                      <div class="typing-indicator speech-bubble-text">
                         <span></span>
                         <span></span>
                         <span></span>
                       </div>
                     </div>
-                  </div> -->
+                  </div>
                 </div>
               </div>
             </div>
