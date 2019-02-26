@@ -1,4 +1,4 @@
-let states =
+const states =
 {
   greeting: {
     action: async (context) => {
@@ -177,20 +177,6 @@ function add_button(parent, text, callback) {
   return element;
 }
 
-function clear_buttons(parent) {
-  while (parent.firstChild) {
-    parent.removeChild(parent.firstChild);
-  }
-}
-
-function append_message(parent, text) {
-  parent.innerHTML += `${text} <br>`;
-}
-
-function append_message_bold(parent, text) {
-  parent.innerHTML += `<b>${text}</b> <br>`;
-}
-
 function append_user_message(parent, text) {
   let outer = document.createElement("div");
   outer.className = "col-lg-12";
@@ -204,6 +190,13 @@ function append_user_message(parent, text) {
   inner.appendChild(textElem);
 
   parent.appendChild(outer);
+}
+
+function injectTagForId(container, id, tag) {
+  let idx = container.innerHTML.indexOf(id);
+  let start = container.innerHTML.substring(0, idx - 1);
+  let end =  container.innerHTML.substring(idx + 1 + id.length);
+  container.innerHTML = start + '<span class="'+tag+'">"' + id + '"</span>' + end;
 }
 
 function append_bot_message(parent, text, transitions, states, context) {
@@ -246,7 +239,7 @@ function repeatEvery(interval, func) {
   setTimeout(start, delay);
 }
 
-var ONE_MINUTE = 60 * 1000;
+const ONE_MINUTE = 60 * 1000;
 
 function formatAMPM(date) {
   var hours = date.getHours();
@@ -263,27 +256,27 @@ window.onload = async () => {
   renderjson.set_icons("+", "-");
   renderjson.set_show_to_level(1);
 
-  let outputLog = document.getElementById("message");
-  let buttons = document.getElementById("buttons");
-  let diagLog = document.getElementById("diagInfo");
+  const info_time = document.getElementById("info-time");
+  const info_location = document.getElementById("info-location");
+  const info_weather = document.getElementById("info-weather");
+  const chat_container = document.getElementById("chat-container");
 
-  let info_time = document.getElementById("info-time");
-  let info_location = document.getElementById("info-location");
-  let info_weather = document.getElementById("info-weather");
-  let chat_container = document.getElementById("chat-container");
-  let typing_indicator = document.getElementById("typing-indicator");
+  const response_container = document.getElementById("response");
+  const context_container = document.getElementById("context");
+  const reward_container = document.getElementById("reward");
 
-  let response_container = document.getElementById("response");
-  let context_container = document.getElementById("context");
-  let reward_container = document.getElementById("reward");
-  let exploit_vs_explore_container = document.getElementById("exploit-vs-explore");
+  const exploit_container = document.getElementById("exploit-percentage");
+  const exploit_name = document.getElementById("exploit-percentage-name");
+  const exploit_percentage = document.getElementById("exploit-percentage-percentage");
 
+  const explore_container = document.getElementById("explore-percentage");
+  const explore_name = document.getElementById("explore-percentage-name");
+  const explore_percentage = document.getElementById("explore-percentage-percentage");
 
   info_time.innerHTML = formatAMPM(new Date);
   repeatEvery(ONE_MINUTE, () => {
     info_time.innerHTML = formatAMPM(new Date);
   });
-
 
   let start_state = states.greeting;
 
@@ -383,48 +376,62 @@ window.onload = async () => {
   context_transitions.featureData.date = new Date();
 
   const go_to_state = async (current_state, state_context) => {
-    // clear_buttons(buttons);
 
     let result = await current_state.action(state_context);
-    // chat_container.removeChild(typing_indicator);
     let button_container = append_bot_message(chat_container, result.response,current_state.transitions);
     let buttons = [];
     for (let action of current_state.transitions) {
       buttons.push(add_button(button_container, action.text, (self) => {
         return () => {
-          // chat_container.appendChild(typing_indicator);
           buttons.forEach(button => button.disabled = true);
           self.classList.add("selected");
-          // TODO disable buttons
           append_user_message(chat_container, action.text);
           go_to_state(states[action.next_state], result.context)
         }
       }));
     }
-    // (outputLog, result.response);
 
     if (result.hasOwnProperty("debug_type")) {
       if (result.debug_type == "rank") {
+        context_container.innerHTML = "";
+        response_container.innerHTML = "";
+        reward_container.innerHTML = "";
         context_container.appendChild(document.createTextNode(JSON.stringify(result.debug.context, null, 2)));
         response_container.appendChild(document.createTextNode(JSON.stringify(result.debug.response, null, 2)));
-        // diagLog.appendChild(document.createTextNode("context sent:"));
-        // diagLog.appendChild(renderjson(result.debug.context));
-        // diagLog.appendChild(document.createTextNode("response received:"));
-        // diagLog.appendChild(renderjson(result.debug.response));
+
+          if(result.debug.response.ranking[0].probability > result.debug.response.ranking[1].probability)
+        {
+          injectTagForId(response_container, result.debug.response.ranking[0].id, "exploit-tag");
+          exploit_container.style.display = "block";
+          exploit_name.innerHTML = result.debug.response.ranking[0].id;
+          exploit_percentage.innerHTML = result.debug.response.ranking[0].probability;
+        }
+        else
+        {
+          let exploreProb = result.debug.response.ranking[0].probability;
+          let exploitItem = result.debug.response.ranking[0];
+          for (let item of result.debug.response.ranking) {
+            if(item.probability > exploreProb)
+            {
+              exploitItem = item;
+            }
+          }
+          injectTagForId(response_container, exploitItem.id, "exploit-tag");
+          injectTagForId(response_container, result.debug.response.ranking[0].id, "explore-tag");
+
+          exploit_container.style.display = "block";
+          exploit_name.innerHTML = exploitItem.id;
+          exploit_percentage.innerHTML = exploitItem.probability;
+
+          explore_container.style.display = "block";
+          explore_name.innerHTML = result.debug.response.ranking[0].id;
+          explore_percentage.innerHTML = result.debug.response.ranking[0].probability;
+        }
       }
       else if (result.debug_type == "reward") {
         reward_container.appendChild(document.createTextNode(JSON.stringify(result.debug.context, null, 2)));
-        // diagLog.appendChild(document.createTextNode("reward sent:"));
-        // diagLog.appendChild(renderjson(result.debug.context));
       }
     }
-
-    // for (let action of current_state.transitions) {
-    //   add_button(buttons, action.text, () => {
-    //     append_message(outputLog, action.text);
-    //     go_to_state(states[action.next_state], result.context)
-    //   });
-    // }
   }
 
   go_to_state(start_state, context_transitions);

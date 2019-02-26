@@ -3,22 +3,16 @@ const coffees = [
     "id": "Espresso",
     "features": [
       {
-        "BeansOrigin": "Brazil"
+        "Organic": "Yes"
       },
       {
-        "Organic": "Y"
+        "Hot": "Yes"
       },
       {
-        "Roast": "DarkRoast"
+        "Milk": "No"
       },
       {
-        "Hot": "Y"
-      },
-      {
-        "Milk": "N"
-      },
-      {
-        "Sweet": "N"
+        "Sweet": "No"
       }
     ]
   },
@@ -26,22 +20,16 @@ const coffees = [
     "id": "Latte",
     "features": [
       {
-        "BeansOrigin": "Kenya"
+        "Organic": "Yes"
       },
       {
-        "Organic": "N"
+        "Hot": "Yes"
       },
       {
-        "Roast": "LightRoast"
+        "Milk": "Yes"
       },
       {
-        "Hot": "Y"
-      },
-      {
-        "Milk": "Y"
-      },
-      {
-        "Sweet": "N"
+        "Sweet": "No"
       }
     ]
   },
@@ -49,22 +37,16 @@ const coffees = [
     "id": "Mocha",
     "features": [
       {
-        "BeansOrigin": "Ethiopia"
+        "Organic": "No"
       },
       {
-        "Organic": "N"
+        "Hot": "Yes"
       },
       {
-        "Roast": "DarkRoast"
+        "Milk": "Yes"
       },
       {
-        "Hot": "Y"
-      },
-      {
-        "Milk": "Y"
-      },
-      {
-        "Sweet": "Y"
+        "Sweet": "Yes"
       }
     ]
   },
@@ -72,22 +54,16 @@ const coffees = [
     "id": "Iced Coffee",
     "features": [
       {
-        "BeansOrigin": "Ethiopia"
+        "Organic": "No"
       },
       {
-        "Organic": "Y"
+        "Hot": "No"
       },
       {
-        "Roast": "LightRoast"
+        "Milk": "No"
       },
       {
-        "Hot": "N"
-      },
-      {
-        "Milk": "N"
-      },
-      {
-        "Sweet": "N"
+        "Sweet": "No"
       }
     ]
   },
@@ -95,22 +71,16 @@ const coffees = [
     "id": "Cold Brew",
     "features": [
       {
-        "BeansOrigin": "Ethiopia"
+        "Organic": "Yes"
       },
       {
-        "Organic": "Y"
+        "Hot": "No"
       },
       {
-        "Roast": "DarkRoast"
+        "Milk": "No"
       },
       {
-        "Hot": "N"
-      },
-      {
-        "Milk": "N"
-      },
-      {
-        "Sweet": "N"
+        "Sweet": "No"
       }
     ]
   }
