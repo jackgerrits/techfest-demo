@@ -5,6 +5,9 @@
   <meta charset="utf-8">
   <title>Techfest</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./jquery-3.3.1.min.js"></script>
+  <script src="./popper.min.js"></script>
+  <script src="./bootstrap.min.js"></script>
   <script src="./key.js"></script>
   <script src="./ext/renderjson.js"></script>
   <script src="./coffees.js"></script>
@@ -12,7 +15,6 @@
   <link rel="stylesheet" href="bootstrap.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro">
   <link rel="stylesheet" type="text/css" href="style.css">
-
 </head>
 
 <body>
@@ -22,7 +24,7 @@
         <span class="rwrl">RWRL / </span><span class="exploitation-vs-exp">Exploitation vs. Exploration</span>
       </div>
       <div class="col-lg-6 top-bar-info">
-        <span>User Sessions</span>
+        <span class>User Sessions</span>
         <span>5</span>
         <span>Exploration Probability</span>
         <span>50%</span>
@@ -49,7 +51,8 @@
           <div class="right-col col-lg-9 top-right-corner bottom-right-corner">
             <div class="row h-100">
               <div class="col-lg-4 d-none d-flex flex-column info-container">
-                <div class="row min-45">
+                <div class="row min-45" data-toggle="tooltip" title="The response is the output of the inference agent based on context and past interactions. It contains the ranking over the possible actions, the first one being the chosen action, and the eventId used to send the reward of the chosen action.
+                ">
                   <div class="col-lg-12 info-header min-45">
                     <img src="icon_response_dk.svg">
                     <span class="info-title">Response received</span>

@@ -252,10 +252,12 @@ function formatAMPM(date) {
   return strTime;
 }
 
-window.onload = async () => {
-  renderjson.set_icons("+", "-");
-  renderjson.set_show_to_level(1);
+// Enable tooltips
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
+window.onload = async () => {
   const info_time = document.getElementById("info-time");
   const info_location = document.getElementById("info-location");
   const info_weather = document.getElementById("info-weather");
