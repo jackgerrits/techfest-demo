@@ -55,8 +55,8 @@
           <div class="right-col col-lg-9 top-right-corner bottom-right-corner">
             <div class="row h-100">
               <div class="col-lg-4 d-none d-flex flex-column info-container">
-                <div class="row min-45" data-toggle="tooltip" title="The response is the output of the inference agent based on context and past interactions. It contains the ranking over the possible actions, the first one being the chosen action, and the eventId used to send the reward of the chosen action.">
-                  <div class="col-lg-12 info-header min-45">
+                <div class="row min-45">
+                  <div class="col-lg-12 info-header min-45" data-toggle="tooltip" title="The response is the output of the inference agent based on context and past interactions. It contains the ranking over the possible actions, the first one being the chosen action, and the eventId used to send the reward of the chosen action.">
                     <img src="icon_response_dk.svg">
                     <span class="info-title">Response received</span>
                   </div>
@@ -68,8 +68,8 @@
               <div class="info-container col-lg-4 d-none d-flex flex-column">
                 <div class="row flex-grow-1">
                   <div class="col-lg-12">
-                    <div class="row min-45" data-toggle="tooltip" title="The reward describes how well the chosen action performed. The eventId is used to identify the corresponding action.">
-                      <div class="col-lg-12 info-header min-45">
+                    <div class="row min-45">
+                      <div class="col-lg-12 info-header min-45" data-toggle="tooltip" title="The reward describes how well the chosen action performed. The eventId is used to identify the corresponding action.">
                         <img src="icon_reward_dk.svg">
                         <span class="info-title">Reward sent</span>
                       </div>
@@ -79,9 +79,9 @@
                 </div>
                 <div class="row  ">
                   <div class="col-lg-12">
-                    <div class="row min-45" data-toggle="tooltip" title="The context contains both the environment features such as location, time of day and weather as well as the list of possible actions that can be chosen and their features.">
-                      <div class="col-lg-12 info-header min-45">
-                        <img src="icon_context_dk.svg">
+                    <div class="row min-45">
+                      <div class="col-lg-12 info-header min-45 context-info-header" data-toggle="tooltip" title="The context contains both the environment features such as location, time of day and weather as well as the list of possible actions that can be chosen and their features.">
+                        <img  id="info-icon-weather" src="icon_context_dk.svg">
                         <span class="info-title">Context</span>
                       </div>
                       <div id="context" class="col-lg-12 info-body scroll-y gross-hack json"></div>
@@ -91,8 +91,8 @@
 
               </div>
               <div class="col-lg-4 info-container top-right-corner bottom-right-corner">
-                <div class="row min-45" data-toggle="tooltip" title="After every decision this section will display if the actions was a result of exploitation or exploration.">
-                  <div class="col-lg-12 info-header top-right-corner min-45">
+                <div class="row min-45">
+                  <div class="col-lg-12 info-header top-right-corner min-45" data-toggle="tooltip" title="After every decision this section will display if the actions was a result of exploitation or exploration.">
                     <img src="icon_experiment_dk.svg">
                     <span class="info-title">Exploit vs. Explore</span>
                   </div>

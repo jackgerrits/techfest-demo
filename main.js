@@ -281,6 +281,7 @@ window.onload = async () => {
   const info_time = document.getElementById("info-time");
   const info_location = document.getElementById("info-location");
   const info_weather = document.getElementById("info-weather");
+  const info_icon_weather = document.getElementById("info-icon-weather");
   const chat_container = document.getElementById("chat-container");
 
   const response_container = document.getElementById("response");
@@ -320,7 +321,34 @@ window.onload = async () => {
     context_transitions.featureData.location = location;
     context_transitions.featureData.weather = await weather(location.coords.latitude, location.coords.longitude);
     info_location.innerHTML = context_transitions.featureData.weather.name;
-    info_weather.innerHTML = context_transitions.featureData.weather.weather[0].main;
+    let weather_description = context_transitions.featureData.weather.weather[0].main;
+    let weather_description_id = context_transitions.featureData.weather.weather[0].id;
+    info_weather.innerHTML = weather_description;
+
+    // https://openweathermap.org/weather-conditions
+    if(weather_description_id >= 200 && weather_description_id < 300)
+    {
+      info_icon_weather.src = "./icon_weather_stormy.svg"
+    }
+    else if(weather_description_id >= 800 && weather_description_id < 900)
+    {
+      switch(weather_description.toLowerCase())
+      {
+        case "few clouds":
+        case "scattered clouds":
+          info_icon_weather.src = "./icon_weather_partly-cloudy.svg";
+        break;
+        case "broken clouds":
+        case "overcast  clouds":
+          info_icon_weather.src = "./icon_weather_cloudy.svg"
+          break;
+      }
+    }
+    else if(weather_description_id >= 300 && weather_description_id < 600)
+    {
+      info_icon_weather.src = "./icon_weather_rainy.svg";
+    }
+
   }
 
   let userFeatureProvider = new UserFeatureProvider();
@@ -452,6 +480,13 @@ window.onload = async () => {
       }
       else if (result.debug_type == "reward") {
         reward_container.appendChild(document.createTextNode(JSON.stringify(result.debug.context, null, 2)));
+        if(result.debug.context.value > 0)
+        {
+
+        }
+        else {
+
+        }
       }
     }
   }
