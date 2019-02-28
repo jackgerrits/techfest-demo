@@ -64,7 +64,8 @@ html {
   position: relative;
   border-radius: 4px;
   width: fit-content;
-  margin: 5px;
+  /* margin: 5px; */
+  margin-top: 10px;
   max-width: 80%;
   font-family: "Segoe UI";
   font-size: 14px;
