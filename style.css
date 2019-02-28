@@ -199,6 +199,7 @@ html {
   font-weight: 300;
   line-height: 22px;
   text-align: right;
+  display: none;
 }
 
 .scroll-y {
@@ -361,7 +362,7 @@ html {
 }
 
 .selected:disabled {
-  color: #333333;
+  color: #9013FE;
 }
 
 @media (min-width: 550px) {
@@ -369,4 +370,12 @@ html {
       border-width: 0 2px 0 0;
  }
 
+}
+.top-bar-info-large-text {
+  font-size: 42px;
+	line-height: 42px;
+}
+
+#sessions {
+  margin-right: 30px;
 }

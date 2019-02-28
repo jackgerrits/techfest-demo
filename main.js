@@ -2,16 +2,16 @@ const states =
 {
   greeting: {
     action: async (context) => {
-      let response = "Hi, welcome. Would you like to see what's available or get a coffee recommendation?";
+      let response = "Would you like to see what's available or get a coffee recommendation?";
       return { response, context };
     },
     transitions: [
       {
-        text: "Show me the menu",
+        text: "See what's available",
         next_state: "menu"
       },
       {
-        text: "What should I get?",
+        text: "Give me a recommendation",
         next_state: "recommend"
       }
     ]
@@ -33,7 +33,23 @@ const states =
       let features = context.userFeatureProvider.generateContextFeatures(context.featureData);
       let temp = await rank(features);
 
-      let response = `Why don't you try a ${temp.response.rewardActionId}?`;
+      // Demo code, should be more generic based on coffees object.
+      let an_or_a;
+      switch(temp.response.rewardActionId) {
+        case "Espresso":
+        case "Iced Coffee":
+          an_or_a = "an";
+          break;
+        case "Latte":
+        case "Mocha":
+        case "Cold Brew":
+          an_or_a = "a";
+          break;
+        default:
+          an_or_a = "a";
+      }
+
+      let response = `How about ${an_or_a} ${temp.response.rewardActionId}?`;
       let debug = {};
       debug.response = temp.response;
       debug.context = temp.context;
@@ -45,12 +61,16 @@ const states =
     },
     transitions: [
       {
-        text: "Sounds good",
+        text: "I like it",
         next_state: "like"
       },
       {
-        text: "Eh",
+        text: "I don't like it",
         next_state: "dislike"
+      },
+      {
+        text: "Give me another recommendation",
+        next_state: "recommend"
       },
       {
         text: "Show me the menu",
@@ -69,11 +89,11 @@ const states =
     },
     transitions: [
       {
-        text: "Give me another recommendation",
+        text: "Get another recommendation",
         next_state: "recommend"
       },
       {
-        text: "Show me the menu",
+        text: "Show me me the menu",
         next_state: "menu"
       }
     ]
