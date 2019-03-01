@@ -391,3 +391,50 @@ html {
 #sessions {
   margin-right: 30px;
 }
+
+.splash-title {
+	color: #000000;
+	font-family: "Source Code Pro";
+	font-size: 42px;
+	letter-spacing: -1.17px;
+	line-height: 40px;
+	margin-top: 100px;
+}
+
+.splash-subtitle {
+  color: #333333;
+  font-family: "Segoe UI";
+  font-size: 20px;
+  line-height: 24px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.splash-section-title {
+  color: #000000;
+  font-family: "Source Code Pro";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.splash-section-text {
+  color: #333333;
+  font-family: "Segoe UI";
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.splash-button {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  border-radius: 22px;
+  background-color: #9013FE;
+  box-shadow: 0 10px 10px 0 rgba(0,0,0,0.1);
+  color: #F5F6FC;
+  font-family: "Segoe UI";
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  padding: 6px 30px 8px 30px;
+}
