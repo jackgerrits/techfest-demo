@@ -66,6 +66,10 @@ html {
   color: #4e4e4e;
 }
 
+.splash {background: linear-gradient(180deg, #FFF9DE 0%, #D1C4DF 100%);text-align: center;}
+
+.col-lg-12.backplate.splash {}
+
 .speech-bubble {
   position: relative;
   border-radius: 4px;

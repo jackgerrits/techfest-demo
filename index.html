@@ -8,10 +8,19 @@
   <script src="./jquery-3.3.1.min.js"></script>
   <script src="./popper.min.js"></script>
   <script src="./bootstrap.min.js"></script>
-  <script src="./key.js"></script>
-  <script src="./ext/renderjson.js"></script>
-  <script src="./coffees.js"></script>
-  <script src="./main.js"></script>
+  <script src="./cookies.js"></script>
+  <script>
+    window.onload = async () => {
+      const sessions_container = document.getElementById("sessions");
+      if (getCookie("sessions") === null) {
+        setCookie("sessions", "0");
+      }
+
+      let num_sessions = parseInt(getCookie("sessions"));
+      sessions_container.innerHTML = num_sessions.toString();
+    };
+
+  </script>
   <link rel="stylesheet" href="bootstrap.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro">
   <link rel="stylesheet" type="text/css" href="style.css">
@@ -35,92 +44,38 @@
       </div>
     </div>
     <div class="row flex-grow-1">
-      <div class="col-lg-12 backplate">
+      <div class="col-lg-12 backplate splash">
         <div class="row h-100">
-          <div class="left-col col col-lg-3 d-none d-flex flex-column gradient top-left-corner bottom-left-corner">
-            <div class="row min-45">
-              <div style="height: fit-content;" class="col-lg-10 offset-lg-1 info-bar">
-                <div data-toggle="tooltip" title="Context: Weather"><img src="icon_sun_dk.svg"><span id="info-weather">weather</span></div>
-                <div data-toggle="tooltip" title="Context: Time"><img src="icon_time_dk.svg"><span id="info-time">time</span></div>
-                <div data-toggle="tooltip" title="Context: Location"><img src="icon_location_dk.svg"><span id="info-location">location</span></div>
-              </div>
-            </div>
-            <div class="row flex-grow-1">
-              <div class="col-lg-10 offset-lg-1">
-                <div class="chat row h-100 align-content-start" id="chat-container">
-                </div>
-              </div>
+          <div class="col-lg-12">
+            <div>A look behind the scenes</div>
+            <div>
+              A powerful aspect of Real World Reinforcement Learning is its ability to explore in tandem with an
+              online policy.
             </div>
           </div>
-          <div class="right-col col-lg-9 top-right-corner bottom-right-corner">
-            <div class="row h-100">
-              <div class="col-lg-4 d-none d-flex flex-column info-container">
-                <div class="row min-45">
-                  <div class="col-lg-12 info-header min-45" data-toggle="tooltip" title="The response is the output of the inference agent based on context and past interactions. It contains the ranking over the possible actions, the first one being the chosen action, and the eventId used to send the reward of the chosen action.">
-                    <img src="icon_response_dk.svg">
-                    <span class="info-title">Response received</span>
-                  </div>
-                </div>
-                <div class="row">
-                  <div id="response" class="col-lg-12 info-body scroll-y json"></div>
-                </div>
-              </div>
-              <div class="info-container col-lg-4 d-none d-flex flex-column">
-                <div class="row flex-grow-1">
-                  <div class="col-lg-12">
-                    <div class="row min-45">
-                      <div class="col-lg-12 info-header min-45" data-toggle="tooltip" title="The reward describes how well the chosen action performed. The eventId is used to identify the corresponding action.">
-                        <img src="icon_reward_dk.svg">
-                        <span class="info-title">Reward sent</span>
-                      </div>
-                      <div id="reward" class="col-lg-12 info-body json"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row  ">
-                  <div class="col-lg-12">
-                    <div class="row min-45">
-                      <div class="col-lg-12 info-header min-45 context-info-header" data-toggle="tooltip" title="The context contains both the environment features such as location, time of day and weather as well as the list of possible actions that can be chosen and their features.">
-                        <img  id="info-icon-weather" src="icon_context_dk.svg">
-                        <span class="info-title">Context</span>
-                      </div>
-                      <div id="context" class="col-lg-12 info-body scroll-y gross-hack json"></div>
-                    </div>
-                  </div>
-                </div>
+          <div class="col-lg-4 offset-lg-2">
+            <img src="icon_response_dk.svg">
+            <div>Exploitation</div>
+            <div>
+              <span class="p-highlight">Exploitation</span> is when the action preferred by the model is
+              chosen. The model preference is based on the context and past interactions.
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <img src="icon_experiment_dk.svg">
+            <div>Exploration</div>
+            <div>
+              <span class="p-highlight">Exploration</span> is when, despite the model's preference, an
+              alternative action is chosen. This is crucial to discover new trends and learn the best
+              policy.
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <a href="./chat.html"><button class="btn">See it in action</button></a>
+          </div>
 
-              </div>
-              <div class="col-lg-4 info-container top-right-corner bottom-right-corner">
-                <div class="row min-45">
-                  <div class="col-lg-12 info-header top-right-corner min-45" data-toggle="tooltip" title="After every decision this section will display if the actions was a result of exploitation or exploration.">
-                    <img src="icon_experiment_dk.svg">
-                    <span class="info-title">Exploit vs. Explore</span>
-                  </div>
-                  <div id="exploit-vs-explore" class="col-lg-12 info-body">
-                    <div class="row">
-                      <div class="col-lg-12 exploit"><span class="exp-left">Expected Response</span><span class="exp-right">Exploitation</span>
-                        <div id="exploit-percentage" class="exploit-percentage percentage-box"><span class="percentage-left"><span
-                              id="exploit-percentage-name"></span></span><span class="percentage-right" id="exploit-percentage-percentage">65%</span></div>
-                        <div style="margin-top: 10px;"><span class="p-highlight">Exploitation</span> is when the action preferred by the model is
-                          chosen. The model preference is based on the context and past interactions.</div>
-                      </div>
-                      <div class="col-lg-12"><span class="exp-left">Experiment Response</span><span class="exp-right">Exploration</span>
-                        <div id="explore-percentage" class="explore-percentage percentage-box"><span class="percentage-left"><span
-                              id="explore-percentage-name"></span></span><span id="explore-percentage-percentage" class="percentage-right">65%</span></div>
-                        <div style="margin-top: 10px;"><span class="p-highlight">Exploration</span> is when, despite the model's preference, an
-                          alternative action is chosen. This is crucial to discover new trends and learn the best
-                          policy.</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
-    </div>
-  </div>
 </body>
 
 </html>
