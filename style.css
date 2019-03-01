@@ -416,6 +416,8 @@ html {
   font-size: 16px;
   font-weight: 600;
   line-height: 22px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .splash-section-text {
@@ -423,6 +425,7 @@ html {
   font-family: "Segoe UI";
   font-size: 14px;
   line-height: 20px;
+  text-indent: 0;
 }
 
 .splash-button {
