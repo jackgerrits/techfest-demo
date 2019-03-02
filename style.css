@@ -441,3 +441,7 @@ html {
   text-align: center;
   padding: 6px 30px 8px 30px;
 }
+
+.choice-btn:hover:not(:disabled) {
+ background-color: #F6ECFF96;
+}
