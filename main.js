@@ -480,6 +480,10 @@ window.onload = async () => {
       }));
     }
 
+    $(chat_container).animate({
+        scrollTop: chat_container.scrollHeight
+    }, 200);
+
     if (result.hasOwnProperty("debug_type")) {
       if (result.debug_type == "rank") {
         context_container.innerHTML = "";
