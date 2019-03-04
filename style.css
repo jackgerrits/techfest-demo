@@ -293,6 +293,7 @@ html {
   border-radius: 10px;
   overflow-y: auto;
   padding-bottom: 10px;
+  height: 670px!important;
 }
 
 .backplate {
