@@ -521,10 +521,10 @@ window.onload = async () => {
         reward_container.appendChild(document.createTextNode(JSON.stringify(result.debug.context, null, 2)));
         if(result.debug.context.value > 0)
         {
-
+          reward_container.innerHTML += '<p class="p-desc">A <span class="p-highlight">positive</span> reward was sent for this action. The model will learn over time that this is a good action for the context.</p>';
         }
         else {
-
+          reward_container.innerHTML += '<p class="p-desc">A <span class="p-highlight">negative</span> reward was sent for this action. The model will learn over time that this is not a good action for the context.</p>';
         }
       }
     }

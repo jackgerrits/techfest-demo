@@ -223,6 +223,12 @@ html {
   background-color: rgba(255,248,166,0.4);
 }
 
+.p-desc {
+  margin-top: 10px;
+  font-family: "Segoe UI";
+  word-break: normal;
+}
+
 .top-right-corner {
   border-top-right-radius: 0;
 }
@@ -286,6 +292,7 @@ html {
   box-shadow: 0 10px 30px 0 rgba(0,0,0,0.1);
   border-radius: 10px;
   overflow-y: auto;
+  padding-bottom: 10px;
 }
 
 .backplate {
