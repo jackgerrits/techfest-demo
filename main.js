@@ -149,7 +149,7 @@ async function rank(contextFeatures) {
   context.excludeActions = null;
   context.activated = true;
 
-  let response = await fetch("https://westus2.api.cognitive.microsoft.com/personalization/v1.0/rank", {
+  let response = await fetch("https://westus2.api.cognitive.microsoft.com/personalizer/v1.0/rank", {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Ocp-Apim-Subscription-Key": COG_SVC_KEY
@@ -173,9 +173,9 @@ async function reward(eventId, value) {
   let context = {};
   context.value = value;
 
-  let response = await fetch(`https://westus2.api.cognitive.microsoft.com/personalization/v1.0/events/${eventId}/reward`, {
+  let response = await fetch(`https://westus2.api.cognitive.microsoft.com/personalizer/v1.0/events/${eventId}/reward`, {
     headers: {
-      "Content-Type": "application/json; charset=utf-8",
+      "Content-Type": "application/json",
       "Ocp-Apim-Subscription-Key": COG_SVC_KEY
     },
     method: "POST",
@@ -435,24 +435,24 @@ window.onload = async () => {
 
       let season = "";
       switch(month) {
-        case 12:
+        case 11:
+        case 0:
         case 1:
-        case 2:
             season = "winter";
         break;
+        case 2:
         case 3:
         case 4:
-        case 5:
             season = "spring";
         break;
+        case 5:
         case 6:
         case 7:
-        case 8:
             season = "summer";
         break;
+        case 8:
         case 9:
         case 10:
-        case 11:
             season = "fall";
         break;
       }
